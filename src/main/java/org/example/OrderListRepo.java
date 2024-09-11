@@ -31,4 +31,11 @@ public class OrderListRepo implements OrderRepo{
     public List<Order> getAllOrders(){
         return orders;
     }
+
+    @Override
+    public String toString() {
+        return "OrderListRepo{" +
+                "orders=" + orders +
+                '}';
+    }
 }

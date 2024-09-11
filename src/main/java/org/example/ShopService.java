@@ -1,18 +1,12 @@
 package org.example;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 public class ShopService {
     ProductRepo productRepo;
-    OrderListRepo  orders = new OrderListRepo(new ArrayList<Order>());
+    OrderRepo orders;
 
-    public ShopService(ProductRepo productRepo) {
-        this.productRepo = productRepo;
-    }
-
-    public ShopService(ProductRepo productRepo, OrderListRepo orders) {
+    public ShopService(ProductRepo productRepo, OrderRepo orders) {
         this.productRepo = productRepo;
         this.orders = orders;
     }
@@ -29,9 +23,35 @@ public class ShopService {
             System.out.println("quantity is not enough");
             return null;
         }
-
         String generatedOrderId = UUID.randomUUID().toString();
-        Order newOrder = new Order(generatedOrderId, productId, quantity, customerName);
+
+        double totalPrice = foundProduct.price() * quantity;
+        Order order = new Order(generatedOrderId, productId, quantity, customerName, totalPrice);
+        orders.addOrder(order);
         return generatedOrderId;
+    }
+
+    public void editOrder(int newQuantity, String orderId) {
+        Order foundOrder = orders.getOrder(orderId);
+
+        if (foundOrder == null) {
+            System.out.println("order not found");
+            return;
+        }
+
+        int foundProductId = foundOrder.productId();
+        Product foundProduct = productRepo.getProduct(foundProductId);
+        double totalPrice = foundProduct.price() * newQuantity;
+
+        Order editedOrder = new Order(foundOrder.orderId(), foundOrder.productId(), newQuantity, foundOrder.customerName(),totalPrice);
+        orders.addOrder(editedOrder);
+    }
+
+    @Override
+    public String toString() {
+        return "ShopService{" +
+                "productRepo=" + productRepo +
+                ", orders=" + orders +
+                '}';
     }
 }

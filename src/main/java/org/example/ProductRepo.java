@@ -34,4 +34,11 @@ public class ProductRepo {
     public List<Product> getAllProducts(){
         return products;
     }
+
+    @Override
+    public String toString() {
+        return "ProductRepo{" +
+                "products=" + products +
+                '}';
+    }
 }
