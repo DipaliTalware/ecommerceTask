@@ -23,11 +23,13 @@ public class ShopService {
             System.out.println("quantity is not enough");
             return null;
         }
-        String generatedOrderId = UUID.randomUUID().toString();
 
+        String generatedOrderId = UUID.randomUUID().toString();
         double totalPrice = foundProduct.price() * quantity;
         Order order = new Order(generatedOrderId, productId, quantity, customerName, totalPrice);
         orders.addOrder(order);
+        Product newProduct = new Product(foundProduct.productId(), foundProduct.name(), foundProduct.price(), foundProduct.quantity()-quantity);
+        productRepo.addProduct(newProduct);
         return generatedOrderId;
     }
 
@@ -44,6 +46,8 @@ public class ShopService {
         double totalPrice = foundProduct.price() * newQuantity;
 
         Order editedOrder = new Order(foundOrder.orderId(), foundOrder.productId(), newQuantity, foundOrder.customerName(),totalPrice);
+        Product newProduct = new Product(foundProduct.productId(), foundProduct.name(), foundProduct.price(), foundProduct.quantity()-newQuantity);
+        productRepo.addProduct(newProduct);
         orders.addOrder(editedOrder);
     }
 

@@ -1,38 +1,34 @@
 package org.example;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ProductRepo {
-    private List<Product> products = new ArrayList<>();
+    private Map<Integer, Product> products = new HashMap<>();
 
-    public ProductRepo(List<Product> products) {
+    public ProductRepo(Map<Integer,Product> products) {
         this.products = products;
     }
 
 //    to add single product in to List
     public void addProduct(Product product) {
-        products.add(product);
+        products.put(product.productId(), product);
     }
 
 //    to remove single product from the list
     public void removeProduct(Product product){
-        products.remove(product);
+        products.remove(product.productId());
     }
 
 //    to get single product
     public Product getProduct(int productId){
-        for (Product product: products){
-            if(product.productId()==(productId)){
-                return product;
-            }
-        }
-        return null;
+        return products.get(productId);
     }
 
 //    to get all products
     public List<Product> getAllProducts(){
-        return products;
+        return products.values().stream().toList();
     }
 
     @Override
